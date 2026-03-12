@@ -1,0 +1,184 @@
+1)  select hiredate,date_format(hiredate,"%Y") 
+from emp;
+
+hiredate,date_format(hiredate,"%y") 
+from emp;
+
+select hiredate,date_format(hiredate,"%M") 
+from emp;
+
+select hiredate,date_format(hiredate,"%m") 
+from emp;
+
+select hiredate,date_format(hiredate,"%D") 
+from emp;
+
+select hiredate,date_format(hiredate,"%d") 
+from emp;
+
+select hiredate,date_format(hiredate,"%Y/%M/%D") 
+from emp;
+
+select hiredate,date_format(hiredate,"%Y/%m/%d") 
+from emp;
+
+**************************************************************************************************************
+
+2)select sal 
+from emp 
+where mod(sal,3)=0;
+**************************************************************************************************************
+
+3)  select ename,sal,concat(ename,"****",round(sal)) 
+from emp;
+**************************************************************************************************************
+
+4)	select ename,sal,concat(ename,"@mycompany.com") from emp;
+**************************************************************************************************************
+
+5)	select ename,sal,concat(ename,length(ename)) 
+from emp;
+**************************************************************************************************************
+
+6)	select ename,concat(substr(ename,1,3),".",substr(job,2,2),"@mycompany") 
+from emp;
+**************************************************************************************************************
+
+7)	select ename,concat(substr(ename,1,1),lower(substr(ename,2,9))," ",substr(job,1,1),lower(substr(job,2,9))) 
+from emp;
+**************************************************************************************************************
+
+8)select ename,concat(lower(substr(ename,1,3)),substr(ename,4,9)) 
+from emp;
+**************************************************************************************************************
+
+9)	select ename,concat(lower(substr(ename,1,3)),lower(substr(job,-2,3)),"@knowit.com") 
+from emp;
+**************************************************************************************************************
+
+10)	select ename,hiredate,abs(round(datediff(hiredate,current_date())/365)) 
+from emp 
+where abs(round(datediff(hiredate,current_date())/365)) > 40;
+**************************************************************************************************************
+
+11)	create table emp11 
+as 
+select * from emp;
+select ename,sal,hiredate,sal+sal*0.10,abs(round(datediff(hiredate,current_date())/365)) 
+from emp 
+where abs(round(datediff(hiredate,current_date())/365)) > 40;
+**************************************************************************************************************
+
+12)	select empno,ename,job,mgr,hiredate,sal,comm,deptno,case 
+when comm is null then 'need improvement' 
+when comm < 500 then 'ok' 
+when comm < 1000 then 'excellent' 
+else 'no remark' end 'remark' 
+from emp;
+**************************************************************************************************************
+
+13)	select ename , sal 
+from emp 
+where sal between 1000 and 3000;
+**************************************************************************************************************
+
+14)	select ename,job,rpad(ename,10," "),lpad(job,9," "),length(rpad(ename,10," ")) ename_length,length(lpad(job,9," ")) job_length 
+from emp;
+**************************************************************************************************************
+
+15)	select ename,comm,concat("HEllo",substr(ename,1,1),lower(substr(ename,2,10)),"!") string 
+from emp 
+where comm is not null and comm != 0;
+**************************************************************************************************************
+
+16)	select ename,concat("Hello"," ",substr(ename,1,1),lower(substr(ename,2,9))) 
+from emp;
+**************************************************************************************************************
+
+17)	select ename,job,concat(ename," is a ",lower(job)) 
+from emp;
+**************************************************************************************************************
+
+18)	select ename , concat(empno,",",ename,",",job,",",ifnull(mgr,0),",",hiredate,",",sal,",",ifnull(comm,0),",",deptno) all_columns 
+from emp;
+**************************************************************************************************************
+
+19)	select hiredate,dayname(hiredate) 
+from emp
+where dayname(hiredate) = 'monday';
+**************************************************************************************************************
+
+20)	select concat(date_format(curdate(),'%M')," ",date_format(curdate(),'%d'),",",date_format(curdate(),'%Y')) date;
+**************************************************************************************************************
+
+21)	select ename,job,sal,deptno from emp where (job = 'manager' or job = 'clerk') and sal >= 2000 and (deptno = 20 or deptno = 30);
+**************************************************************************************************************
+
+22)	select ename,job,sal,deptno 
+from emp 
+where (job = 'analyst' or job = 'clerk') and sal >= 1000 and (deptno = 20 or deptno = 30);
+**************************************************************************************************************
+
+23)	select ename,date_format(hiredate,"%Y") year,deptno 
+from emp 
+where (deptno = 10 or deptno = 30) and date_format(hiredate,"%Y") = '1982' ;
+**************************************************************************************************************
+
+24)	select round(datediff(curdate(),'2003-05-21')/365) age;
+**************************************************************************************************************
+
+25)	select deptno,comm 
+from emp 
+where comm = 0 or comm is null;
+**************************************************************************************************************
+
+26)	select ename,deptno,hiredate 
+from emp 
+where hiredate between '1881-01-01' and '1983-03-31' order by hiredate;
+**************************************************************************************************************
+
+27)	select hiredate,date_format(hiredate,"%Y") 
+from emp;
+
+select hiredate,date_format(hiredate,"%y") 
+from emp;
+
+select hiredate,date_format(hiredate,"%M") 
+from emp;
+
+select hiredate,date_format(hiredate,"%m") 
+from emp;
+
+select hiredate,date_format(hiredate,"%D") 
+from emp;
+
+select hiredate,date_format(hiredate,"%d")
+from emp;
+
+select hiredate,date_format(hiredate,"%Y/%M/%D") 
+from emp;
+
+select hiredate,date_format(hiredate,"%Y/%m/%d") 
+from emp;
+**************************************************************************************************************
+
+28)	select ename,hiredate 
+from emp 
+where hiredate between '1987-06-01' and '1987-07-30';
+**************************************************************************************************************
+
+29)	select hiredate,monthname(hiredate) 
+from emp 
+where monthname(hiredate) = 'june';
+**************************************************************************************************************
+
+30)	select ename,sal,date_format(hiredate,"%Y") 
+from emp 
+where date_format(hiredate,"%Y") = '1983' 
+order by date_format(hiredate,"%Y") desc;
+**************************************************************************************************************
+
+31)	select empno,ename,adddate(hiredate,interval 1 month) 
+from emp;
+
+
