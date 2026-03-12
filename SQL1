@@ -1,0 +1,135 @@
+
+1) show databases;
+use knowitdb;
+create table vehicle(
+vid  int,
+vname varchar(20),
+price int,
+discount int,
+milage int,
+details varchar(50)
+);
+
+create table customer(
+custid int,
+cname varchar(10),
+location varchar(10)
+);
+
+create table salesman(
+sid int,
+sname varchar(20),
+city varchar(20),
+experience int
+);
+
+insert into vehicle values(1,'activa',80000,10,35,'two wheeler.sturdy.milage 30 km'),
+(2,'santro',95000,20,20,'product of hyandai'),
+(3,'yamaha',160000,5,70,'sturdy and good milage'),
+(4,'i-10',300000,8,18,'good small car'),
+(5,'waganr',250000,10,25,'good milage car'),
+(6,'hero splendor',75000,9,65,'best bike'),
+(7,'rolay enfild',190000,5,40,'a royal bike')
+;
+
+insert into customer values(1,'nilima','pimpri'),
+(2,'ganesh','pune'),
+(3,'kishor','kothrud'),
+(4,'priya','aundh');
+
+insert into salesman values(10,'rajesh','mumbai',5),
+(11,'seema','pune',8),
+(12,'shailesh','nagpur',7),
+(13,'rakhi','pune',2);
+
+************************************************************************************************************
+
+2)select * from 
+salesman 
+where city = 'pune';
+************************************************************************************************************
+
+3) insert into customar values
+(5,'geeta','pimpri'),
+(6,'Raj','aundh'),
+(7,'yash','aundh');
+************************************************************************************************************
+
+4) select * from vehicle 
+where vname = 'rolay enfild';
+************************************************************************************************************
+
+5) select * from vehicle;
+************************************************************************************************************
+
+6) select * from vehicle 
+where vname = 'i-10';
+************************************************************************************************************
+
+7) select vid,vname,price,details,price+price*0.08 Total_price 
+from vehicle;
+************************************************************************************************************
+
+8) select * from 
+vehicle 
+where price < 100000;
+************************************************************************************************************
+
+9) select * from salesman
+where experience > 5;
+************************************************************************************************************
+
+10) create table employee(
+eno int,
+ename varchar(20),
+basic int,
+incentive int);
+
+insert into employee values
+(1,'rajesh',20000,1500),
+(2,'sarita',25000,1500),
+(3,'meera',15000,3000),
+(4,'jitesh',30000,500),
+(5,'ramehs',12000,3000);
+
+select * from employee
+where basic > 15000;
+************************************************************************************************************
+
+11) select eno,ename,basic,incentive,basic+basic*0.05 net_Salary from employee
+where basic < 20000;
+************************************************************************************************************
+
+12)insert into employee(eno,ename,basic)
+	Values(20,’ajay’,16000);
+  ************************************************************************************************************
+
+13) delete from customer 
+where location = 'pimpari';
+************************************************************************************************************
+
+14) delete from customer 
+where location = 'aundh' and cname = 'priya';
+************************************************************************************************************
+
+15) update vehicle 
+set price = 80000 
+where price = 75000;
+************************************************************************************************************
+
+16) drop table salesman1;
+************************************************************************************************************
+
+17) update employee 
+set incentive = 1000 
+where ename = 'jitesh';
+************************************************************************************************************
+
+18) delete from employee 
+where ename = 'meera';
+************************************************************************************************************
+
+19) update employee 
+set basic = 60000 
+where ename = 'Ramesh';
+
