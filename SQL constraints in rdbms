@@ -95,7 +95,7 @@ author(aid int auto_increment,
 aname varchar(20), 
 constraint pk_a primary key(aid));
 
-insert into author(aname) 
+ insert into author(aname) 
 values('J.K.Rowling'),
 ('Munshi Premchand'),
 ('Mario Puzo'),
@@ -113,64 +113,100 @@ select * from author;
 
 create table 
 language(lid int auto_increment,
-iname varchar(20), 
+lname varchar(20), 
 constraint pk_l primary key(lid));
 
 insert into 
-language(iname) 
-values('Marathi'),
+language(lname) values('marathi'),
 ('English'),
 ('Hindi');
-select * from language;
+
+ select * from language;
 +-----+---------+
-| lid | iname   |
+| lid | lname   |
 +-----+---------+
-|   1 | Marathi |
+|   1 | marathi |
 |   2 | English |
 |   3 | Hindi   |
 +-----+---------+
 
 create table 
 book(bid int auto_increment,
-bname varchar(20),
+bname varchar(50),
 lid int,
 aid int, 
-constraint pk_b primary key(bid),
-constraint fl_l foreign key(lid) references language(lid) on delete set null,
-constraint fl_a foreign key(aid) references author(aid) on delete set null);
-describe book;
-+-------+-------------+------+-----+---------+----------------+
-| Field | Type        | Null | Key | Default | Extra          |
-+-------+-------------+------+-----+---------+----------------+
-| bid   | int         | NO   | PRI | NULL    | auto_increment |
-| bname | varchar(20) | YES  |     | NULL    |                |
-| lid   | int         | YES  | MUL | NULL    |                |
-| aid   | int         | YES  | MUL | NULL    |                |
-+-------+-------------+------+-----+---------+----------------+
+constraint pk_b primary key(bid), 
+constraint fk_l foreign key(lid) references language(lid) on delete set null,
+constraint fk_a foreign key(aid) references author(aid) on delete set null);
+
 insert into 
 book(bname,lid,aid) 
 values('Golden',3,2),
 ('Shriman Yogi',1,4),
-('Harry Potter',2,1),
+('Harry Potter and the goblet of fire',2,1),
 ('The Godfather',2,3);
-select * from book;
-+-----+---------------+------+------+
-| bid | bname         | lid  | aid  |
-+-----+---------------+------+------+
-|   9 | Golden        |    3 |    2 |
-|  10 | Shriman Yogi  |    1 |    4 |
-|  11 | Harry Potter  |    2 |    1 |
-|  12 | The Godfather |    2 |    3 |
-+-----+---------------+------+------+
+
+ select * from book;
++-----+-------------------------------------+------+------+
+| bid | bname                               | lid  | aid  |
++-----+-------------------------------------+------+------+
+|   1 | Golden                              |    3 |    2 |
+|   2 | Shriman Yogi                        |    1 |    4 |
+|   3 | Harry Potter and the goblet of fire |    2 |    1 |
+|   4 | The Godfather                       |    2 |    3 |
++-----+-------------------------------------+------+------+
 
 
-a) delete from language 
-where iname='marathi';
-
+a) delete from 
+language 
+where lname = 'marathi';
 select * from language;
 +-----+---------+
-| lid | iname   |
+| lid | lname   |
 +-----+---------+
 |   2 | English |
 |   3 | Hindi   |
 +-----+---------+
+
+b)delete from 
+author 
+where aname = 'j.k.rowling';
+select * from author;
++-----+------------------+
+| aid | aname            |
++-----+------------------+
+|   2 | Munshi Premchand |
+|   3 | Mario Puzo       |
+|   4 | Ranjeet Desai    |
++-----+------------------+
+
+c)drop tables 
+book,author,language;
+
+d)create table
+author(aid int auto_increment,
+aname varchar(20),
+constraint pk_a primary key(aid));
+
+create table
+language(lid int auto_increment,
+lname varchar(20),
+constraint pk_l primary key(lid));
+
+create table
+book(bid int auto_increment,
+bname varchar(50),
+lid int,
+aid int,
+constraint pk_b primary key(bid),
+constraint fk_l foreign key(lid) references language(lid) on delete set null,
+constraint fk_a foreign key(aid) references author(aid) on delete set null);
+
+e)insert into
+book(bname,lid,aid)
+values('Golden',3,2),
+('Shriman Yogi',1,4),
+('Harry Potter and the goblet of fire',2,1),
+('The Godfather',2,3);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`test`.`book`, CONSTRAINT `fk_l` FOREIGN KEY (`lid`) REFERENCES `language` (`lid`) ON DELETE SET NULL)
+mysql>
