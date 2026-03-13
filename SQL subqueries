@@ -1,0 +1,291 @@
+1) select * 
+from emp 
+where sal > (select sal 
+            from emp 
+            where ename = 'smith');
++-------+--------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+
+*********************************************************************************************************************************************
+2)  select * 
+from emp 
+where sal > any (select sal 
+                from emp 
+                where ename = "martin" or ename = 'ford');
++-------+--------+-----------+------+------------+---------+--------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM   | DEPTNO |
++-------+--------+-----------+------+------------+---------+--------+--------+
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 | 300.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |   NULL |     20 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |   NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |   NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |   NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |   NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |   0.00 |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |   NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |   NULL |     10 |
++-------+--------+-----------+------+------------+---------+--------+--------+
+*********************************************************************************************************************************************
+3) select * 
+from emp 
+where sal < (select sal 
+            from emp 
+            where ename = 'scott') and sal> (select sal 
+                                            from emp 
+                                            where ename = 'adams');
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER  | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER  | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7934 | MILLER | CLERK    | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+----------+------+------------+---------+---------+--------+
+*********************************************************************************************************************************************
+4) select * 
+from emp 
+where sal > any (select sal 
+                from emp 
+                where ename = 'Ward' or ename = 'blake');
++-------+--------+-----------+------+------------+---------+--------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM   | DEPTNO |
++-------+--------+-----------+------+------------+---------+--------+--------+
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 | 300.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |   NULL |     20 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |   NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |   NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |   NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |   NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |   0.00 |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |   NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |   NULL |     10 |
++-------+--------+-----------+------+------------+---------+--------+--------+
+*********************************************************************************************************************************************
+5)  select * 
+from emp 
+where sal > any (select avg(sal) 
+                from emp 
+                where deptno = 10);
++-------+-------+-----------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB       | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+-----------+------+------------+---------+------+--------+
+|  7566 | JONES | MANAGER   | 7839 | 1981-04-02 | 2975.00 | NULL |     20 |
+|  7788 | SCOTT | ANALYST   | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
+|  7839 | KING  | PRESIDENT | NULL | 1981-11-17 | 5000.00 | NULL |     10 |
+|  7902 | FORD  | ANALYST   | 7566 | 1981-12-03 | 3000.00 | NULL |     20 |
++-------+-------+-----------+------+------------+---------+------+--------+
+*********************************************************************************************************************************************
+6)  select * 
+from emp 
+where deptno = (select deptno 
+                from dept 
+                where dname = 'sales');
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
++-------+--------+----------+------+------------+---------+---------+--------+
+*********************************************************************************************************************************************
+7) select deptno,sum(sal) over(),min(sal) over() 
+from emp 
+where job = 'manager';
++--------+-----------------+-----------------+
+| deptno | sum(sal) over() | min(sal) over() |
++--------+-----------------+-----------------+
+|     20 |         8275.00 |         2450.00 |
+|     30 |         8275.00 |         2450.00 |
+|     10 |         8275.00 |         2450.00 |
++--------+-----------------+-----------------+
+*********************************************************************************************************************************************
+8) create table 
+category( cid int primary key, 
+cname varchar(15) unique not null, 
+description varchar(30));
+
+insert into 
+category values(1,'chips','very crunchy'),
+(2,'chocolate','very chocolaty'),
+(3,'snacks','yummy'),
+(4,'cold drinks','thanda thanda cool cool');
+
+select * from category;
++-----+-------------+-------------------------+
+| cid | cname       | description             |
++-----+-------------+-------------------------+
+|   1 | chips       | very crunchy            |
+|   2 | chocolate   | very chocolaty          |
+|   3 | snacks      | yummy                   |
+|   4 | cold drinks | thanda thanda cool cool |
++-----+-------------+-------------------------+
+
+create table 
+salesman(sid int primary key,
+sname varchar(15) unique not null, 
+city varchar(15));
+
+insert into 
+salesman values(11,'rahul','pune'),
+(12,'kirti','mumbai'),
+(13,'prasad','nashik'),
+(14,'arnav','amravati');
+
+select * from salesman;
++-----+--------+----------+
+| sid | sname  | city     |
++-----+--------+----------+
+|  11 | rahul  | pune     |
+|  12 | kirti  | mumbai   |
+|  13 | prasad | nashik   |
+|  14 | arnav  | amravati |
++-----+--------+----------+
+
+create table 
+product(pid int primary key,
+pname varchar(20),
+price float(6,2) default 20.00,
+qty int check(qty>0), 
+cid int,
+sid int,
+constraint fk_cid foreign key(cid) references category(cid) on delete set null,
+constraint fk_sid foreign  key(sid) references salesman(sid));
+
+insert into product values
+(123,'lays',30,30.00,1,12),
+(111,'pepsi',40,50.00,4,11),
+(134,'nachos',50,50.00,1,12),
+(124,'dairy milk',40,60.00,2,14),
+(125,'pringles',40,60.00,1,14),
+(213,'Sketch pen',56,150.00,null,11),
+(167,'eraser',90,5.00,null,null);
+
+a)select p.pid,p.pname,c.cid,c.cname 
+from product p, category c 
+where p.cid = (select cid 
+              from category 
+              where cname = 'chips') and p.cid=c.cid ;
++-----+----------+-----+-------+
+| pid | pname    | cid | cname |
++-----+----------+-----+-------+
+| 123 | lays     |   1 | chips |
+| 125 | pringles |   1 | chips |
+| 134 | nachos   |   1 | chips |
++-----+----------+-----+-------+
+b) select * 
+from salesman s 
+where sid not in (select p.sid
+                  from product p 
+                  where p.sid is not null);
++-----+--------+--------+
+| sid | sname  | city   |
++-----+--------+--------+
+|  13 | prasad | nashik |
++-----+--------+--------+
+
+c) select * 
+from category c 
+where cid not in (select p.cid 
+                  from product p 
+                  where p.cid is not null);
++-----+--------+-------------+
+| cid | cname  | description |
++-----+--------+-------------+
+|   3 | snacks | yummy       |
++-----+--------+-------------+
+
+d) select * 
+from product 
+where cid is null;
++-----+------------+-------+------+------+------+
+| pid | pname      | price | qty  | cid  | sid  |
++-----+------------+-------+------+------+------+
+| 167 | eraser     | 90.00 |    5 | NULL | NULL |
+| 213 | Sketch pen | 56.00 |  150 | NULL |   11 |
++-----+------------+-------+------+------+------+
+
+e)  select *
+from salesman 
+where regexp_like(city,'^P.*') or regexp_like(city,'^N.');
++-----+--------+--------+
+| sid | sname  | city   |
++-----+--------+--------+
+|  11 | rahul  | pune   |
+|  13 | prasad | nashik |
++-----+--------+--------+
+
+f) alter table 
+salesman add Credit_Limit float(10,2);
+select * 
+from salesman;
++-----+--------+----------+--------------+
+| sid | sname  | city     | Credit_Limit |
++-----+--------+----------+--------------+
+|  11 | rahul  | pune     |         NULL |
+|  12 | kirti  | mumbai   |         NULL |
+|  13 | prasad | nashik   |         NULL |
+|  14 | arnav  | amravati |         NULL |
++-----+--------+----------+--------------+
+*********************************************************************************************************************************************
+9) create table room(rid int primary key,
+rname varchar(15) not null,
+rloc varchar(20));
+
+insert into 
+room values(100,'jasmin','1st floor'),
+(101,'rose','2nd floor'),
+(105,'lotus','1st floor');
+
+ select * from room;
++-----+--------+-----------+
+| rid | rname  | rloc      |
++-----+--------+-----------+
+| 100 | jasmin | 1st floor |
+| 101 | rose   | 2nd floor |
+| 105 | lotus  | 1st floor |
++-----+--------+-----------+
+
+create table faculty(fid int primary key,
+fname varchar(20) not null, 
+sp_skill1 varchar(30),
+sp_skill2 varchar(30));
+
+insert into 
+faculty values(10,'amol','Database','Java'),(11,'asha','java','mysql'),
+(12,'kiran','cpp','database'),
+(13,'seete','mysql','database');
+select * from faculty;
++-----+-------+-----------+-----------+
+| fid | fname | sp_skill1 | sp_skill2 |
++-----+-------+-----------+-----------+
+|  10 | amol  | Database  | Java      |
+|  11 | asha  | java      | mysql     |
+|  12 | kiran | cpp       | database  |
+|  13 | seete | mysql     | database  |
++-----+-------+-----------+-----------+
+*********************************************************************************************************************************************
+*********************************************************************************************************************************************
+*********************************************************************************************************************************************
+*********************************************************************************************************************************************
