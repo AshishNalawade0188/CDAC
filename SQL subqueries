@@ -166,8 +166,8 @@ select * from salesman;
 create table 
 product(pid int primary key,
 pname varchar(20),
-price float(6,2) default 20.00,
-qty int check(qty>0), 
+qty float(6,2) default 20.00,
+price int check(qty>0), 
 cid int,
 sid int,
 constraint fk_cid foreign key(cid) references category(cid) on delete set null,
