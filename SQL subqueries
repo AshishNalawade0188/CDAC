@@ -179,8 +179,7 @@ insert into product values
 (134,'nachos',50,50.00,1,12),
 (124,'dairy milk',40,60.00,2,14),
 (125,'pringles',40,60.00,1,14),
-(213,'Sketch pen',56,150.00,null,11),
-(167,'eraser',90,5.00,null,null);
+(213,'Sketch pen',56,150.00,null,11);
 
 a)select p.pid,p.pname,c.cid,c.cname 
 from product p, category c 
