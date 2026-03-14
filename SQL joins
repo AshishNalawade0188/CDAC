@@ -215,3 +215,17 @@ where e.sal > (select avg(e.sal) from emp e);
 +-------+---------+--------+------------+
 6 rows in set (0.01 sec)
 ===========================================================================================================================================
+15) select e.ename,e.sal,e.deptno,d.dname,s.grade 
+from emp e 
+join dept d 
+on e.deptno = d.deptno 
+join salgrade s 
+on e.sal between s.losal and s.hisal 
+where s.grade = 3 and e.job = 'salesman';
+
++--------+---------+--------+-------+-------+
+| ename  | sal     | deptno | dname | grade |
++--------+---------+--------+-------+-------+
+| TURNER | 1500.00 |     30 | SALES |     3 |
+| ALLEN  | 1600.00 |     30 | SALES |     3 |
++--------+---------+--------+-------+-------+
