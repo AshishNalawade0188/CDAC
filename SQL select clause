@@ -1,0 +1,60 @@
+mysql> select vid 'vehicle id', vname 'vehicle name', price,discount, details from vehicle;
+
+mysql> select * from emp where sal > 2000 and comm > 200;
+
+mysql> select * from emp where job = 'clerk' or sal > 2000;
+
+mysql> select * from emp where sal = 1250 or sal = 1100;
+
+mysql> select * from emp where sal > 1250 and sal < 2850;
+
+mysql> select ename,sal,deptno from emp where deptno = 20;
+
+mysql> select * from emp where hiredate > '1981-06-9';
+
+mysql> select empno, ename as empname, sal, ifnull(comm,0) as comm, ifnull(comm,0)+sal as 'Total Salary' from emp;
+
+mysql> select * from emp where sal > 2000 or job = 'clerk' or job = 'salesman';
+
+mysql> select * from emp where deptno = 20 or deptno = 30 and( comm is null or comm = 0);
+
+mysql> select * from emp where (deptno = 10 or deptno = 30) and hiredate > '1982-01-01' and hiredate < '1982-12-31';
+
+mysql> select * from emp where job != 'manager';
+
+mysql> select * from emp where hiredate > '1981-01-01' and hiredate < '1983-12-31';
+
+mysql> create table emp10 as select * from emp where 1=2;
+mysql> select * from emp10;
+
+mysql> insert into emp10(empno,ename,job,hiredate,sal,comm,deptno) values(7310,'ashish','manager','1991-12-23',2000,100,20);
+
+mysql> select * from emp where job != 'manager';
+
+mysql> select empno,ename,deptno from emp where mgr = 7698;
+
+mysql> select * from emp where job = 'manager' and deptno = 10;
+
+mysql> select distinct job from emp;
+
+mysql> select distinct deptno from emp;
+
+19) mysql> select e.ename,e.deptno, d.dname from emp e, dept d;
+
+20) mysql> select e.ename,e.deptno, d.dname from emp e, dept d where ename = 'smith';
+
+21) mysql> create table customer1 as select * from customer;
+mysql> create table salesman1 as select * from salesman;
+
+22) mysql> select *,case when comm is null then 'need improvement' when comm < 500 then 'ok' when comm >= 500 and comm < 1000 then 'good' else 'excelent' end'remark' from emp;
+
+23) mysql> create table emp100 as select * from emp where 1=2;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from emp100;
+Empty set (0.00 sec)
+
+24)
+
+
