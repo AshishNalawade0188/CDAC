@@ -1,0 +1,31 @@
+Resctrctibf records
+1)	mysql> Select * from emp where regexp_like(ename,'R$');
+mysql> Select * from emp where ename like '%R';
+
+2)	mysql> Select * from emp where regexp_like(ename,'^[MA].*[RE]$');
+3)	mysql> Select * from emp where regexp_like(ename,'^[M].*[R]$');
+mysql> Select * from emp where ename like '_L%';
+4)	
+5)	mysql> Select * from emp where regexp_ike(ename,'^.L.*,');
+6)	mysql> Select * from emp where ename like '__L%';
+7)	mysql> Select * from emp where regexp_like(ename,'.*[ES]$');
+8)	mysql> Select * from emp where regexp_like(ename,'^[AM].*[E]$');
+9)	mysql> Select * from emp where regexp_like(job,'^[c].*[k]$');
+10)	mysql> select * from emp where regexp_like(ename,'^[A].*[N]$') or regexp_like(ename,'^[S].*[H]$');
+11)	mysql> select * from emp where regexp_like(ename,'^[M].[L].*[R]$');
+12)	mysql> select * from emp where regexp_like(ename,'..[L].*[E].');
+13)	mysql> select * from emp where regexp_like(ename,'^[^MA].*');
+
+14)	mysql> select * from emp where sal between 1000 and 3000 and (regexp_like(job,'^[A].*[T]$'));
+15)	ysql> select empno,ename, sal, comm commission,sal+sal*0.10 increased_Sal from emp where regexp_like(ename,'^[AMS].*');
+16)	mysql> select * from emp where deptno = 10 or regexp_like(ename,'^[A].*[NS]$');
+17)	mysql> select * from dept where regexp_like(dname,'[a-z]{8}');
+18)	mysql> select * from emp where regexp_like(ename,'.*[E].');
+19)	mysql> select * from emp where regexp_like(ename,'^[A].*[S]$') or regexp_like(ename,'.[A].* | ..[N].*') and regexp_like(ename,'.*[NS]$');
+20)	mysql> select * from emp where deptno = 20 and regexp_like(ename,'^[AS].*');
+21)	mysql> select * from emp where regexp_like(job,'..[EC].*[K]$');
+22)	mysql> select * from emp where regexp_like(job,'..[L].*[M]..');
+23)	mysql> select * from emp where regexp_like(ename,'^[S].*') and comm is null;
+24)	mysql> select * from emp where sal not between 2000 and 3000 and regexp_like(job,'.*[MAN]$');
+25)	mysql> select * from emp where (deptno=20 or deptno=30) and regexp_like(ename,'.*[^S]$');
+26)	mysql> select * from emp where (deptno=20 or deptno=30) and regexp_like(ename,'.*[ER]$');
