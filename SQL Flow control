@@ -38,21 +38,167 @@ mysql> select @a;
 1 row in set (0.00 sec)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-2)  delimiter //
-drop procedure if exists update_salary_hike;
-create procedure update_salary_hike(in p_job varchar(20))
-begin
-update emp100
-set sal = case
-when lower(job) = 'manager'
-then sal * 1.05
-when lower(job) = 'clerk'
-then sal * 1.10
-when lower(job) = 'analyst'
-then sal*1.07
-else sal*1.03
-end
-where lower(job) = lower(p_job);
-end //
-delimiter ;
+2)  mysql> delimiter //
+mysql> drop procedure if exists update_salary_hike;
+    -> create procedure update_salary_hike(in p_job varchar(20))
+    -> begin
+    -> update emp
+    -> set sal = case
+    -> when lower(job) = 'manager'
+    -> then sal * 1.05
+    -> when lower(job) = 'clerk'
+    -> then sal * 1.10
+    -> when lower(job) = 'analyst'
+    -> then sal*1.07
+    -> else sal*1.03
+    -> end
+    -> where lower(job) = lower(p_job);
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter ;
+mysql> call Update_salary_hike("manager");
+Query OK, 3 rows affected (0.01 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 3123.75 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2992.50 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2572.50 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3) DELIMITER //
+
+DROP PROCEDURE IF EXISTS calculate_factorial //
+
+CREATE PROCEDURE calculate_factorial(IN num INT)
+BEGIN
+    DECLARE fact BIGINT DEFAULT 1;
+    DECLARE i INT DEFAULT 1;
+    
+    IF num < 0 THEN
+        SELECT 'Error: Number must be non-negative' AS Result;
+    ELSEIF num = 0 OR num = 1 THEN
+        SELECT CONCAT('Factorial of ', num, ' is 1') AS Result;
+    ELSE
+        WHILE i <= num DO
+            SET fact = fact * i;
+            SET i = i + 1;
+        END WHILE;
+        
+        SELECT CONCAT('Factorial of ', num, ' is ', fact) AS Result;
+    END IF;
+END //
+
+DELIMITER ;
+
+mysql> call calculate_factorial(5);
++-----------------------+
+| Result                |
++-----------------------+
+| Factorial of 5 is 120 |
++-----------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call calculate_factorial(10);
++----------------------------+
+| Result                     |
++----------------------------+
+| Factorial of 10 is 3628800 |
++----------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call calculate_factorial(20);
++----------------------------------------+
+| Result                                 |
++----------------------------------------+
+| Factorial of 20 is 2432902008176640000 |
++----------------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+4) mysql> CREATE PROCEDURE update_analyst_comm(IN p_empno INT)
+    -> BEGIN
+    ->     UPDATE emp11
+    ->     SET comm = 2000
+    ->     WHERE empno = p_empno
+    ->     AND lower(job) = 'analyst'
+    ->     AND (comm IS NULL OR comm = 0);
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> call update_analyst_comm(7788);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp11 where empno = 7788;
++-------+-------+---------+------+------------+---------+---------+--------+
+| EMPNO | ENAME | JOB     | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+-------+---------+------+------------+---------+---------+--------+
+|  7788 | SCOTT | ANALYST | 7566 | 1982-12-09 | 3000.00 | 2000.00 |     20 |
++-------+-------+---------+------+------------+---------+---------+--------+
+1 row in set (0.00 sec)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+5) mysql> CREATE PROCEDURE print_range(IN m INT, IN n INT)
+    -> BEGIN
+    ->     DECLARE start_num INT;
+    ->     DECLARE end_num INT;
+    ->     DECLARE result_str TEXT DEFAULT '';
+    ->
+    ->     IF m < n THEN
+    ->         SET start_num = m;
+    ->         SET end_num = n;
+    ->     ELSE
+    ->         SET start_num = n;
+    ->         SET end_num = m;
+    ->     END IF;
+    ->
+    ->     WHILE start_num <= end_num DO
+    ->         IF result_str = '' THEN
+    ->             SET result_str = CAST(start_num AS CHAR);
+    ->         ELSE
+    ->             SET result_str = CONCAT(result_str, ',', start_num);
+    ->         END IF;
+    ->         SET start_num = start_num + 1;
+    ->     END WHILE;
+    ->
+    ->     SELECT result_str AS output;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> call print_range(9,2);
++-----------------+
+| output          |
++-----------------+
+| 2,3,4,5,6,7,8,9 |
++-----------------+
+1 row in set (0.00 sec)
+
 
