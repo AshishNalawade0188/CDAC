@@ -1,1 +1,58 @@
+1) delimiter //
+drop procedure if exists perfect_no;
+create procedure perfect_no(in x int, out y int)
+begin
+declare i int default 1;
+declare sum_val int default 0;
+
+while i < x
+do
+if(x%i = 0)
+then
+set sum_val=sum_val+i;
+end if;
+set i = i+1;
+end while;
+
+if x = sum_val 
+then
+set y = 1;
+else
+set y = 0;
+end if;
+end //
+delimiter ;
+
+
+mysql> call perfect_no(6,@a);
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select @a;
+    -> //
++------+
+| @a   |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2)  delimiter //
+drop procedure if exists update_salary_hike;
+create procedure update_salary_hike(in p_job varchar(20))
+begin
+update emp100
+set sal = case
+when lower(job) = 'manager'
+then sal * 1.05
+when lower(job) = 'clerk'
+then sal * 1.10
+when lower(job) = 'analyst'
+then sal*1.07
+else sal*1.03
+end
+where lower(job) = lower(p_job);
+end //
+delimiter ;
 
