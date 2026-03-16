@@ -1,0 +1,138 @@
+1) 
+delimiter //
+drop procedure if exists avg_sal;
+create procedure avg_sal(in n decimal(7,2))
+begin 
+select avg(sal) from emp;
+end //
+delimiter ;
+
+call avg_sal(@q);
++-------------+
+| avg(sal)    |
++-------------+
+| 2073.214286 |
++-------------+
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+2) delimiter //
+drop procedure if exists avg_sal_20;
+create procedure avg_sal_20(out n decimal(7,2))
+begin 
+select avg(sal) into n from emp where deptno = 20;
+end //
+delimiter  ;
+
+call avg_sal_20(@x);
+
+select @x;
++---------+
+| @x      |
++---------+
+| 2175.00 |
++---------+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+3)  delimiter //
+drop procedure if exists avg_sal;
+create procedure avg_sal( n int, out deptn decimal(7,2) )
+begin 
+select avg(sal) into deptn from emp where deptno = n;
+end //
+delimiter  ;
+
+
+call avg_sal(10,@x)
+select @x;
++---------+
+| @x      |
++---------+
+| 2916.67 |
++---------+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+4) delimiter //  
+create procedure total_sal(salary double(7,2), comm double(7,2))
+begin
+declare total double(7,2);
+set total = salary+comm;
+select total;
+end //
+delimiter ;
+
+ call total_sal(1000,500);
++---------+
+| total   |
++---------+
+| 1500.00 |
++---------+
+
+///////////////////////////////////////////////////////////////////////////////////////
+5) delimiter //
+drop procedure if exists sal_emp;
+create procedure sal_emp(n int,out msal decimal(7,2))
+begin
+declare x int;
+declare y decimal(7,2);
+select empno,sal into x,y from emp where empno = n;
+if x = n 
+then set msal = y;
+else 
+set msal = 0;
+end if;
+end //
+delimiter;
+
+
+mysql> call sal_emp(1,@a);
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select @a;
+    -> //
++------+
+| @a   |
++------+
+| 0.00 |
++------+
+1 row in set (0.00 sec)
+
+mysql> call sal_emp(7499,@a);
+    -> //
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @a;
+    -> //
++---------+
+| @a      |
++---------+
+| 1600.00 |
++---------+
+1 row in set (0.00 sec)
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+6) delimiter //  
+drop procedure if exists display;
+create procedure display(eno int, out name varchar(15), out sal_in  decimal(7,2), out dno int,out j varchar(15))
+begin
+
+select ename,sal,deptno,job into name,sal_in,dno,j
+from emp
+where empno = eno;
+end//
+delimiter;
+//
+
+mysql> call display(7369,@n,@p,@q,@s);
+    -> //
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @n,@p,@q,@s;
+    -> //
++-------+--------+------+-------+
+| @n    | @p     | @q   | @s    |
++-------+--------+------+-------+
+| SMITH | 800.00 |   20 | CLERK |
++-------+--------+------+-------+
