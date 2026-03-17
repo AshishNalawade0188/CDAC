@@ -27,3 +27,156 @@ delimiter ;
 +--------+--------+---------+---------+----------------+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+2) delimiter //
+create function gmail(ename varchar(20),job varchar(20)) returns varchar(30)
+begin
+   declare gmail varchar(30);
+   set gmail=concat(substr(ename,1,2),substr(job,-2,2),'@knowit.com');
+   return gmail;
+end //
+delimiter ;
+
+select ename,job,gmail(ename,job) as email from emp;
+
++--------+-----------+-----------------+
+| ename  | job       | email           |
++--------+-----------+-----------------+
+| SMITH  | CLERK     | SMRK@knowit.com |
+| ALLEN  | SALESMAN  | ALAN@knowit.com |
+| WARD   | SALESMAN  | WAAN@knowit.com |
+| JONES  | MANAGER   | JOER@knowit.com |
+| MARTIN | SALESMAN  | MAAN@knowit.com |
+| BLAKE  | MANAGER   | BLER@knowit.com |
+| CLARK  | MANAGER   | CLER@knowit.com |
+| SCOTT  | ANALYST   | SCST@knowit.com |
+| KING   | PRESIDENT | KINT@knowit.com |
+| TURNER | SALESMAN  | TUAN@knowit.com |
+| ADAMS  | CLERK     | ADRK@knowit.com |
+| JAMES  | CLERK     | JARK@knowit.com |
+| FORD   | ANALYST   | FOST@knowit.com |
+| MILLER | CLERK     | MIRK@knowit.com |
++--------+-----------+-----------------+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3)  
+DELIMITER $$
+
+CREATE FUNCTION fact(n INT)
+RETURNS BIGINT
+DETERMINISTIC
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    DECLARE result BIGINT DEFAULT 1;
+
+    WHILE i <= n DO
+        SET result = result * i;
+        SET i = i + 1;
+    END WHILE;
+
+    RETURN result;
+END $$
+
+DELIMITER ;
+
+
+
+call facto(5);
++--------+-----------+
+| Number | Factorial |
++--------+-----------+
+|      5 |       120 |
++--------+-----------+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+4) delimiter //
+CREATE FUNCTION Annual_salary(sal decimal(7,2),comm decimal(7,2)) returns decimal(7,2)
+begin
+   declare annual_sal varchar(30);
+   set annual_sal = sal+comm;
+   return annual_sal;
+end //
+delimiter ;
+ select e.sal,e.comm,annual_salary(e.sal,ifnull(e.comm,0)) from emp e, salgrade g where job = 'manager' and (e.sal between g.losal and g.hisal);
++---------+------+---------------------------------------+
+| sal     | comm | annual_salary(e.sal,ifnull(e.comm,0)) |
++---------+------+---------------------------------------+
+| 2572.50 | NULL |                               2572.50 |
+| 2992.50 | NULL |                               2992.50 |
+| 3123.75 | NULL |                               3123.75 |
++---------+------+---------------------------------------+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+5)  DELIMITER $$
+
+CREATE FUNCTION get_experience(hiredate DATE)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE exp INT;
+    SET exp = TIMESTAMPDIFF(YEAR, hiredate, CURDATE());
+    RETURN exp;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE emp_award()
+BEGIN
+    SELECT 
+        ename,
+        deptno,
+        get_experience(hiredate) AS experience,
+        CASE 
+            WHEN get_experience(hiredate) > 44 THEN 'Award'
+            ELSE NULL
+        END AS remark
+    FROM emp;
+END $$
+
+DELIMITER ;
+
+call emp_award();
++--------+--------+------------+--------+
+| ename  | deptno | experience | remark |
++--------+--------+------------+--------+
+| SMITH  |     20 |         45 | Award  |
+| ALLEN  |     30 |         45 | Award  |
+| WARD   |     30 |         45 | Award  |
+| JONES  |     20 |         44 | NULL   |
+| MARTIN |     30 |         44 | NULL   |
+| BLAKE  |     30 |         44 | NULL   |
+| CLARK  |     10 |         44 | NULL   |
+| SCOTT  |     20 |         43 | NULL   |
+| KING   |     10 |         44 | NULL   |
+| TURNER |     30 |         44 | NULL   |
+| ADAMS  |     20 |         43 | NULL   |
+| JAMES  |     30 |         44 | NULL   |
+| FORD   |     20 |         44 | NULL   |
+| MILLER |     10 |         44 | NULL   |
++--------+--------+------------+--------+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+6) DELIMITER $$
+
+CREATE PROCEDURE find_top_dept1(IN p_deptno INT)
+BEGIN
+    SELECT 
+        d.deptno,
+        d.dname,
+        d.loc,
+        SUM(e.sal) AS "Sum Sal"
+    FROM dept d
+    JOIN emp e ON d.deptno = e.deptno
+    WHERE d.deptno = p_deptno
+    GROUP BY d.deptno, d.dname, d.loc;
+END $$
+
+DELIMITER ;
+
+call find_top_dept1(30);
++--------+-------+---------+---------+
+| deptno | dname | loc     | Sum Sal |
++--------+-------+---------+---------+
+|     30 | SALES | CHICAGO | 9542.50 |
++--------+-------+---------+---------+
+
+
