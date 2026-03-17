@@ -1,7 +1,7 @@
 1) mysql> SELECT empno,ename,deptno,sal,rnk
     -> FROM (select empno,ename,deptno,sal ,
     ->       rank() over(partition by deptno order by sal desc) as rnk
-    ->       FROM emp e) x
+    ->       FROM emp ) x
     -> WHERE x.rnk < 4;
 +-------+--------+--------+---------+-----+
 | empno | ename  | deptno | sal     | rnk |
@@ -17,7 +17,8 @@
 |  7844 | TURNER |     30 | 1500.00 |   3 |
 +-------+--------+--------+---------+-----+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-2) select *, max(sal) over(partition by deptno) as high_sal_by_dept from (select ename,sal,deptno from emp) x;
+2) select *, max(sal) over(partition by deptno) as high_sal_by_dept 
+from (select ename,sal,deptno from emp) x;
 +--------+---------+--------+------------------+
 | ename  | sal     | deptno | high_sal_by_dept |
 +--------+---------+--------+------------------+
@@ -36,3 +37,78 @@
 | TURNER | 1500.00 |     30 |          2992.50 |
 | JAMES  |  950.00 |     30 |          2992.50 |
 +--------+---------+--------+------------------+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3)  create table emp_table(employee_id int primary key,
+    employee_name varchar(50),
+    department varchar(50),
+    salary decimal(10,2)
+    );
+
+insert into emp_table 
+values(1,'alice','sales',60000),
+(2,'bob','sales',75000),
+(3,'charlie','it',80000),
+(4,'david','it',95000),
+(5,'eve','hr',55000),
+(6,'frank','hr',62000),
+(7,'grace','sales',60000),
+(8,'heidi','it',80000);
+
+ select * from emp_table;
++-------------+---------------+------------+----------+
+| employee_id | employee_name | department | salary   |
++-------------+---------------+------------+----------+
+|           1 | alice         | sales      | 60000.00 |
+|           2 | bob           | sales      | 75000.00 |
+|           3 | charlie       | it         | 80000.00 |
+|           4 | david         | it         | 95000.00 |
+|           5 | eve           | hr         | 55000.00 |
+|           6 | frank         | hr         | 62000.00 |
+|           7 | grace         | sales      | 60000.00 |
+|           8 | heidi         | it         | 80000.00 |
++-------------+---------------+------------+----------+
+
+create table 
+sales_table(sail_id int primary key,
+sale_date date,
+product_name varchar(50),
+amount decimal(10,2));
+
+insert into sales_table 
+values(1,'2024-01-01','laptop',1200),
+(2,'2024-01-02','mouse',25),
+(3,'2024-01-02','keyboard',75),
+(4,'2024-01-03','laptop',1200),
+(5,'2024-01-04','monitor',300),
+(6,'2024-01-05','mouse',25),
+(7,'2024-01-05','keyboard',75),
+(8,'2024-01-08','monitor',300);
+
+mysql> select * from sales_table;
++---------+------------+--------------+---------+
+| sail_id | sale_date  | product_name | amount  |
++---------+------------+--------------+---------+
+|       1 | 2024-01-01 | laptop       | 1200.00 |
+|       2 | 2024-01-02 | mouse        |   25.00 |
+|       3 | 2024-01-02 | keyboard     |   75.00 |
+|       4 | 2024-01-03 | laptop       | 1200.00 |
+|       5 | 2024-01-04 | monitor      |  300.00 |
+|       6 | 2024-01-05 | mouse        |   25.00 |
+|       7 | 2024-01-05 | keyboard     |   75.00 |
+|       8 | 2024-01-08 | monitor      |  300.00 |
++---------+------------+--------------+---------+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+select *,sum(amount) over(rows unbounded preceding) as cumulative_sum from sales_table order by sale_date and sail_id;
++---------+------------+--------------+---------+----------------+
+| sail_id | sale_date  | product_name | amount  | cumulative_sum |
++---------+------------+--------------+---------+----------------+
+|       1 | 2024-01-01 | laptop       | 1200.00 |        1200.00 |
+|       2 | 2024-01-02 | mouse        |   25.00 |        1225.00 |
+|       3 | 2024-01-02 | keyboard     |   75.00 |        1300.00 |
+|       4 | 2024-01-03 | laptop       | 1200.00 |        2500.00 |
+|       5 | 2024-01-04 | monitor      |  300.00 |        2800.00 |
+|       6 | 2024-01-05 | mouse        |   25.00 |        2825.00 |
+|       7 | 2024-01-05 | keyboard     |   75.00 |        2900.00 |
+|       8 | 2024-01-08 | monitor      |  300.00 |        3200.00 |
++---------+------------+--------------+---------+----------------+
