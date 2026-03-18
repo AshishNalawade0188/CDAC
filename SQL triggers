@@ -1,0 +1,168 @@
+1) create table product
+(
+  pid int,
+  pname varchar(15),
+  price double(7,2),
+  qty int
+);
+insert into product
+values(1,'Seema',50000,10),
+      (2,'Raj',60500,15),
+      (3,'Yash',60000,17);
+ select * from product;
++------+-------+----------+------+
+| pid  | pname | price    | qty  |
++------+-------+----------+------+
+|    1 | Seema | 50000.00 |   10 |
+|    2 | Raj   | 60500.00 |   15 |
+|    3 | Yash  | 60000.00 |   17 |
++------+-------+----------+------+
+
+create table product_details
+(pid int,
+amt double(9,2));
+
+delimiter //
+create trigger update_amt
+after update
+on product
+for each row
+begin
+   insert into product_details
+   values(old.pid,old.price*old.qty);
+end //
+delimiter ;
+
+mysql> select * from product;
++------+-------+----------+------+
+| pid  | pname | price    | qty  |
++------+-------+----------+------+
+|    1 | Seema | 50000.00 |   10 |
+|    2 | Raj   | 50000.00 |   15 |
+|    3 | Yash  | 60000.00 |   17 |
++------+-------+----------+------+
+3 rows in set (0.00 sec)
+
+mysql> select * from product_details;
++------+-----------+
+| pid  | amt       |
++------+-----------+
+|    2 | 907500.00 |
++------+-----------+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+2) create table emp_wages
+(eno int,
+ ename varchar(15),
+ sal int,
+ over_time int
+);
+insert into emp_wages
+values(1,'Geeta',20000,500),
+      (2,'Amit',30000,1000),
+      (3,'Raj',25000,800);
+
+mysql> insert into emp_wages values(1,'ashish',5000,6000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into emp_wages values(1,'ashish',5000,null);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp_wages;
++------+--------+-------+-----------+
+| eno  | ename  | sal   | over_time |
++------+--------+-------+-----------+
+|    1 | Geeta  | 20000 |       500 |
+|    2 | Amit   | 30000 |      1000 |
+|    3 | Raj    | 25000 |       800 |
+|    1 | ashish |  5000 |      6000 |
+|    1 | ashish |  5000 |       400 |
++------+--------+-------+-----------+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+3)create table order_master(oid int,pname varchar(20),qty int, price decimal(7,2));
+insert into order_master values(1,'ashish',30,50000),(2,'sujita',5,25000),(3,'samiksha',7,20000);
+create table order_log(oid int, odate date,amt decimal(9,2));
+
+delimiter //
+create trigger insert_order
+after insert
+on order_master
+for each row
+begin
+   insert into order_log
+   values(new.oid,curdate(),new.price*new.qty);
+end //
+delimiter ;
+
+mysql> select * from order_master;
++------+----------+------+----------+
+| oid  | pname    | qty  | price    |
++------+----------+------+----------+
+|    1 | ashish   |   30 | 50000.00 |
+|    2 | sujita   |    5 | 25000.00 |
+|    3 | samiksha |    7 | 20000.00 |
+|    3 | sanika   |    9 | 30000.00 |
++------+----------+------+----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into order_master values(4,"kunal",7,32000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from order_log;
++------+------------+-----------+
+| oid  | odate      | amt       |
++------+------------+-----------+
+|    4 | 2026-03-18 | 224000.00 |
++------+------------+-----------+
+1 row in set (0.00 sec)
+
+////////////////////////////////////////////////////////////////////////////////
+
+6) create table emp_data(eno int primary key auto_increment,ename varchar(20),job varchar(20),sal double(7,2));
+insert into emp_data(ename,job,sal) values('akshay','developer',30000),('anika','analyst',50000),('radhika','manager',65000);
+ select * from emp_data;
++-----+---------+-----------+----------+
+| eno | ename   | job       | sal      |
++-----+---------+-----------+----------+
+|   1 | akshay  | developer | 30000.00 |
+|   2 | anika   | analyst   | 50000.00 |
+|   3 | radhika | manager   | 65000.00 |
++-----+---------+-----------+----------+
+
+create table emp_log(eno int , ename varchar(20),job varchar(20),oldsal double(7,2),newsal double(7,2));
+
+delimiter //
+create trigger update_sal_log
+AFTER update
+on emp_data
+for each row
+begin
+   insert into emp_log(eno,ename,job,oldsal,newsal)
+   values(old.eno,old.ename,old.job,old.sal,new.sal);
+end //
+delimiter ;
+
+mysql> update emp_data set sal = 25000 where eno = 2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from emp_data;
++-----+---------+-----------+----------+
+| eno | ename   | job       | sal      |
++-----+---------+-----------+----------+
+|   1 | akshay  | developer | 30000.00 |
+|   2 | anika   | analyst   | 25000.00 |
+|   3 | radhika | manager   | 65000.00 |
++-----+---------+-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select * from emp_log;
++------+-------+---------+----------+----------+
+| eno  | ename | job     | oldsal   | newsal   |
++------+-------+---------+----------+----------+
+|    2 | anika | analyst | 50000.00 | 25000.00 |
++------+-------+---------+----------+----------+
+
