@@ -1,0 +1,153 @@
+1) CREATE KEYSPACE objtech WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
+
+cqlsh> use objtech;
+cqlsh:objtech> CREATE TABLE student(
+           ...    student_id int PRIMARY KEY,
+           ...    student_name text,
+           ...    student_city text,
+           ...    student_fees varint,
+           ...    student_phone varint
+           ...    );
+cqlsh:objtech> select * from student;
+
+ student_id | student_city | student_fees | student_name | student_phone
+------------+--------------+--------------+--------------+---------------
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+2) cqlsh:objtech> create keyspace knowitbda with
+           ... replication = {'class':'SimpleStrategy','replication_factor’ : 1};
+
+cqlsh:objtech> insert into institute(institute_id,ins_city,ins_phone,ins_regno,name) values(1,'pune',12354576,1234,'seeta');
+cqlsh:objtech>  insert into institute(institute_id,name,ins_city,ins_regno,ins_phone)
+           ...  values(2,'geeta','mumbai',4321,6543214);
+
+cqlsh:objtech> select * from institute;
+
+ institute_id | ins_city | ins_phone | ins_regno | name
+--------------+----------+-----------+-----------+-------
+            1 |     pune |  12354576 |      1234 | seeta
+            2 |   mumbai |   6543214 |      4321 | geeta
+cqlsh:objtech> alter table institute add email text;
+cqlsh:objtech> select * from institute;
+
+ institute_id | email | ins_city | ins_phone | ins_regno | name
+--------------+-------+----------+-----------+-----------+-------
+            1 |  null |     pune |  12354576 |      1234 | seeta
+            2 |  null |   mumbai |   6543214 |      4321 | geeta
+
+cqlsh:objtech> alter table institute drop email;
+cqlsh:objtech> select * from institute;
+
+ institute_id | ins_city | ins_phone | ins_regno | name
+--------------+----------+-----------+-----------+-------
+            1 |     pune |  12354576 |      1234 | seeta
+            2 |   mumbai |   6543214 |      4321 | geeta
+
+cqlsh:objtech> alter table institute drop (ins_regno,ins_phone);
+cqlsh:objtech> select * from institute;
+
+ institute_id | ins_city | name
+--------------+----------+-------
+            1 |     pune | seeta
+            2 |   mumbai | geeta
+
+cqlsh:objtech> drop table institute;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+3) cqlsh:objtech> create table product( pid int primary key,
+           ... name text,
+           ... descp text,
+           ... price varint,
+           ... qty varint);
+cqlsh:objtech> insert into product(pid,name,descp,price,qty) values(101,'TV','sony',20000,2);
+cqlsh:objtech>  insert into product(pid,name,descp,price,qty)
+           ...  values(102,'Washing Machine','Bajaj',20000,2);
+cqlsh:objtech> insert into product(pid,name,descp,price,qty) values(103,'smartphone','oneplus',40000,3);
+
+cqlsh:objtech> select * from product;
+
+ pid | descp   | name            | price | qty
+-----+---------+-----------------+-------+-----
+ 102 |   Bajaj | Washing Machine | 20000 |   2
+ 101 |    sony |              TV | 20000 |   2
+ 103 | oneplus |      smartphone | 40000 |   3
+
+cqlsh:objtech> select pid,name from product;
+
+ pid | name
+-----+-----------------
+ 102 | Washing Machine
+ 101 |              TV
+ 103 |      smartphone
+
+cqlsh:objtech> select * from product where pid = 102;
+
+ pid | descp | name            | price | qty
+-----+-------+-----------------+-------+-----
+ 102 | Bajaj | Washing Machine | 20000 |   2
+
+qlsh:objtech> delete from product
+           ...  where pid=103;
+cqlsh:objtech> select * from product;
+
+ pid | descp | name            | price | qty
+-----+-------+-----------------+-------+-----
+ 102 | Bajaj | Washing Machine | 20000 |   2
+ 101 |  sony |              TV | 20000 |   2
+
+cqlsh:objtech> delete price from product
+           ...  where pid=101;
+cqlsh:objtech> select * from product;
+
+ pid | descp | name            | price | qty
+-----+-------+-----------------+-------+-----
+ 102 | Bajaj | Washing Machine | 20000 |   2
+ 101 |  sony |              TV |  null |   2
+
+cqlsh:objtech> update product
+           ...  set price=10000, name= 'TV'
+           ...  where pid = 102;
+cqlsh:objtech> select * from product;
+
+ pid | descp | name | price | qty
+-----+-------+------+-------+-----
+ 102 | Bajaj |   TV | 10000 |   2
+ 101 |  sony |   TV |  null |   2
+
+cqlsh:objtech> USE objtech;
+cqlsh:objtech> DESCRIBE TABLE product;
+
+CREATE TABLE objtech.product (
+    pid int PRIMARY KEY,
+    descp text,
+    name text,
+    price varint,
+    qty varint
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+    AND compression = {'chunk_length_in_kb': '64', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND crc_check_chance = 1.0
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99PERCENTILE';
+CREATE INDEX name ON objtech.product (name);
+
+cqlsh:objtech> DROP INDEX name;
+
+cqlsh:objtech> BEGIN BATCH
+           ...    INSERT INTO product (pid, price, name) values (4, 4000, 'CD Player');
+           ...    UPDATE product SET price = 8000 WHERE pid = 333;
+           ...    DELETE price FROM product WHERE pid=222;
+           ... APPLY BATCH;
+cqlsh:objtech>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
