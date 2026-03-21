@@ -1,1 +1,157 @@
-1) 
+1) test> db.movie.find({actor : {$size : 3}})
+[
+  {
+    _id: ObjectId('5c8283789eb55675f0272933'),
+    name: 'uri',
+    rating: 5,
+    actor: [ 'vicky kaushal', 'yami', 'Paresh Rawal' ],
+    price: -37.8
+  },
+  {
+    _id: ObjectId('5ca456072952ebdd7ae2a930'),
+    name: 'paa',
+    actor: [ 'Amitabh', 'vidya balan', 'Abhishek' ],
+    rating: 2,
+    price: 232.2,
+    ticket_no: 210,
+    rdate: ISODate('2019-01-23T00:00:00.000Z'),
+    others: { director: 'R Balki', songs: 'Amit trivedi' }
+  },
+  {
+    _id: ObjectId('5aaa3334639395f86922a882'),
+    name: 'aradhana',
+    actor: [ 'amitabh', 'prem', 'rajesh khanna' ],
+    rating: 3,
+    ticket_no: 550,
+    price: 222.2
+  }
+]
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2) test> db.movie.find({'actor.1' : /^[Aa]mitabh/})
+[
+  {
+    _id: ObjectId('5aaa3334639395f86922a881'),
+    name: 'sholay',
+    actor: [
+      'Dharamendra',
+      'Amitabh',
+      'Sachin Pilgaokar',
+      'Dharamendra',
+      'Dharamendra',
+      'Mr. Khote',
+      'jaya bacchan',
+      'sanjiv kapoor'
+    ],
+    rating: 6,
+    ticket_no: 550,
+    price: 312.20000000000005,
+    position: [ 2, 2 ]
+  }
+]
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3)test> db.movie.updateMany({name : 'sholay'},{$push:{actor : 'akshay kumar'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+} 
+
+test> db.movie.find({name : 'sholay'})
+[
+  {
+    _id: ObjectId('5aaa3334639395f86922a881'),
+    name: 'sholay',
+    actor: [
+      'Dharamendra',
+      'Amitabh',
+      'Sachin Pilgaokar',
+      'Dharamendra',
+      'Dharamendra',
+      'Mr. Khote',
+      'jaya bacchan',
+      'sanjiv kapoor',
+      'akshay kumar'
+    ],
+    rating: 6,
+    ticket_no: 550,
+    price: 312.20000000000005,
+    position: [ 2, 2 ]
+  }
+]
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+4) test>  db.movie.updateMany({name : 'lagaan'},{$push:{actor : {$each :['priyanka'],$position : 2}}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+5)  test>  db.movie.updateMany({name : '3 idiots'},{$inc : {price : 50,rating : 3}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+6) test>  db.movie.updateOne({name : 'Kesari'},{$unset : {rating : ''}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+7) test>  db.movie.updateOne({name : 'Kesari'},{$push:{actor :{$each : ['Akshay','Ranbir','Arjun']} }})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test>  db.movie.find({name : 'Kesari'})
+[
+  {
+    _id: ObjectId('5ca453ef2952ebdd7ae2a92f'),
+    name: 'Kesari',
+    actor: [ 'Akshay Kumar', 'Pariniti chopra', 'Akshay', 'Ranbir', 'Arjun' ],
+    price: 311.1,
+    ticket_no: 270,
+    rdate: ISODate('2019-01-23T00:00:00.000Z')
+  }
+]
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+8) b.movie.updateMany({ actor: { $type: "array" } },{ $pop: { actor: -1 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 16,
+  modifiedCount: 15,
+  upsertedCount: 0
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+9) test> db.movie.updateMany( { $or: [ { actor: { $type: "array" } }, { actor: { $type: "string" } } ] }, { $pop: { actor: 1 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 17,
+  modifiedCount: 15,
+  upsertedCount: 0
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+10) test> db.movie.updateOne({name : 'DDLJ'},{$pull : {actor : 'Amrish Puri'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
