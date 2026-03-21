@@ -1,0 +1,117 @@
+1) test> db.createCollection("dept",{capped : true, max : 3, size : 20000,})
+{ ok: 1 }
+
+test> db.dept1.insertMany([{dno : 1,dname : 'sales', location : 'pune'},{dno : 2,dname : 'account', location : 'mumbai'},{dno : 3,dname : 'project', location : 'nashik'},{dno : 4,dname : 'manager', location : 'nagpur'},{dno : 5,dname : 'advertise', location : 'thane'}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69be3d28d9750fdc3c11402a'),
+    '1': ObjectId('69be3d28d9750fdc3c11402b'),
+    '2': ObjectId('69be3d28d9750fdc3c11402c'),
+    '3': ObjectId('69be3d28d9750fdc3c11402d'),
+    '4': ObjectId('69be3d28d9750fdc3c11402e')
+  }
+
+test> db.dept1.find()
+[
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402a'),
+    dno: 1,
+    dname: 'sales',
+    location: 'pune'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402b'),
+    dno: 2,
+    dname: 'account',
+    location: 'mumbai'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402c'),
+    dno: 3,
+    dname: 'project',
+    location: 'nashik'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402d'),
+    dno: 4,
+    dname: 'manager',
+    location: 'nagpur'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402e'),
+    dno: 5,
+    dname: 'advertise',
+    location: 'thane'
+  }
+]
+
+a) test> db.dept1.insertOne({dbo : 6, dname : 'account',location : 'satara'})
+{
+  acknowledged: true,
+  insertedId: ObjectId('69be3dbed9750fdc3c114030')
+}
+test> db.dept1.find()
+[
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402b'),
+    dno: 2,
+    dname: 'account',
+    location: 'mumbai'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402c'),
+    dno: 3,
+    dname: 'project',
+    location: 'nashik'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402d'),
+    dno: 4,
+    dname: 'manager',
+    location: 'nagpur'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402e'),
+    dno: 5,
+    dname: 'advertise',
+    location: 'thane'
+  },
+  {
+    _id: ObjectId('69be3dbed9750fdc3c114030'),
+    dbo: 6,
+    dname: 'account',
+    location: 'satara'
+  }
+]
+
+
+b) test> db.dept1.deleteOne({dno : 3})
+{ acknowledged: true, deletedCount: 1 }
+test> db.dept1.find()
+[
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402b'),
+    dno: 2,
+    dname: 'account',
+    location: 'mumbai'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402d'),
+    dno: 4,
+    dname: 'manager',
+    location: 'nagpur'
+  },
+  {
+    _id: ObjectId('69be3d28d9750fdc3c11402e'),
+    dno: 5,
+    dname: 'advertise',
+    location: 'thane'
+  },
+  {
+    _id: ObjectId('69be3dbed9750fdc3c114030'),
+    dbo: 6,
+    dname: 'account',
+    location: 'satara'
+  }
+]
