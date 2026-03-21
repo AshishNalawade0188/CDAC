@@ -1,0 +1,156 @@
+1) test> db.movie.find({actor : "amir"})
+[
+  {
+    _id: ObjectId('5aaa31ee639395f86922a87f'),
+    name: '3 idiots',
+    actor: [ 'Kareena Kapoor', 'amir', 'kareena', 'mahadavan', 'sharman' ],
+    rating: 3,
+    ticket_no: 150,
+    price: 200
+  },
+  {
+    _id: ObjectId('5aaa3334639395f86922a880'),
+    name: 'lagaan',
+    actor: [ 'amir', 'angraz' ],
+    rating: 6,
+    ticket_no: 410,
+    price: 350,
+    cancellation: { date: Timestamp({ t: 1554356003, i: 1 }), reason: 'user request' },
+    lastModified: ISODate('2019-04-04T05:33:23.022Z')
+  }
+]
+
+///////////////////////////////////////////////////////////////////////////////////////
+2) test> db.movie.updateMany({name:/^[Kk].*/},{$set:{rating:8}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+///////////////////////////////////////////////////////////////////////////////
+3) test> db.movie.updateMany({price : {$in : [null],$exists : false}},{$inc:{price : 1.10}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+///////////////////////////////////////////////////////////////////////////////////////
+4) test> db.movie.updateOne({name : 'kahani 2'},{$set:{rating : 5}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+/////////////////////////////////////////////////////////////////////////////////
+
+5) test> db.movie.updateMany({name : /kahani/i},{$set : {price : 400},$inc:{rating : 2}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 2,
+  upsertedCount: 0
+}
+//////////////////////////////////////////////////////////////////////
+6) test> db.movie.updateMany({price :{$ne : null,$exists : true}},{$inc:{price : -40}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 17,
+  modifiedCount: 17,
+  upsertedCount: 0
+}
+/////////////////////////////////////////////////////////////////////////
+7)test> db.movie.find({},{name : 1,rating : 1, _id : 0}).sort({rating : -1}).limit(5)
+[
+  { name: 'Kesari', rating: 8 },
+  { name: 'kahani 2', rating: 7 },
+  { name: 'sholay', rating: 6 },
+  { name: 'mission mangal', rating: 6 },
+  { name: 'kahani', rating: 6 }
+]
+///////////////////////////////////////////////////////////////////////
+8) db.movie.updateMany({ name: "Andhadhund", price: { $ne: null, $exists: true } },{ $inc: { price: -40, rating: -2 } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+////////////////////////////////////////////////////////////////////////
+9) test> db.movie.updateMany({price :{$ne : null,$exists : true}},{$inc : {price : 1.10}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 17,
+  modifiedCount: 17,
+  upsertedCount: 0
+}
+///////////////////////////////////////////////////////////////////////////////////////
+10) test> db.movie.updateOne({name : '3 idiots'},{$set : {director : 'Director'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.movie.find({name : '3 idiots'})
+[
+  {
+    _id: ObjectId('5aaa31ee639395f86922a87f'),
+    name: '3 idiots',
+    actor: [ 'Kareena Kapoor', 'amir', 'kareena', 'mahadavan', 'sharman' ],
+    rating: 3,
+    ticket_no: 150,
+    price: 161.1,
+    director: 'Director'
+  }
+]
+/////////////////////////////////////////////////////////////////////////////
+11) test>  db.movie.updateMany({actor : /^[Aa]mitabh/,price :{$ne : null,$exists : true}},{$inc : {price : 1.10}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+/////////////////////////////////////////////////////////////////////////////
+12) test> db.movie.find({actor : {$size : 3}}).count()
+3
+//////////////////////////////////////////////////////////////////////////////////
+
+13) test> db.movie.find({$and: [{ rating: null },{ rating: { $exists: true } }]})
+[
+  {
+    _id: ObjectId('5d8f51ce065d3e2aa902aa22'),
+    name: 'dream girl',
+    actor: [ 'ayushman', 'nushrat bharucha' ],
+    price: 211.1,
+    rating: null
+  }
+]
+]
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+15) test> db.movie.find({'actor.0' : /^[Aa]mitabh/},{name : 1,price : 1, _id : -1})
+[
+  {
+    _id: ObjectId('5ca456072952ebdd7ae2a930'),
+    name: 'paa',
+    price: 232.2
+  },
+  {
+    _id: ObjectId('5aaa3334639395f86922a882'),
+    name: 'aradhana',
+    price: 222.2
+  }
+]
