@@ -1,0 +1,69 @@
+1 ) test> db.movie.find({actor : /^[Aa]mitabh/},{name : 1, rating : 1, price : 1})
+[
+  {
+    _id: ObjectId('5aaa3334639395f86922a881'),
+    name: 'sholay',
+    rating: 6,
+    price: 350
+  },
+  {
+    _id: ObjectId('5ca456072952ebdd7ae2a930'),
+    name: 'paa',
+    rating: 2,
+    price: 270
+  },
+  {
+    _id: ObjectId('5aaa3334639395f86922a882'),
+    name: 'aradhana',
+    rating: 3,
+    price: 260
+  }
+]
+/////////////////////////////////////////////////////////////////////////////////
+2) test> db.movie.find({actor : /^[Aa]mitabh/},{name : 1, rating : 1, price : 1}).count()
+3
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+3) test> db.movie.find({name : /^[0-9].*/},{})
+[
+  {
+    _id: ObjectId('5aaa31ee639395f86922a87f'),
+    name: '3 idiots',
+    actor: [ 'Kareena Kapoor', 'amir', 'kareena', 'mahadavan', 'sharman' ],
+    rating: 3,
+    ticket_no: 150,
+    price: 200
+  }
+]
+////////////////////////////////////////////////////////////////////////////////
+
+4) test> db.movie.find({name : /^[0-9].*[s]$/},{})
+[
+  {
+    _id: ObjectId('5aaa31ee639395f86922a87f'),
+    name: '3 idiots',
+    actor: [ 'Kareena Kapoor', 'amir', 'kareena', 'mahadavan', 'sharman' ],
+    rating: 3,
+    ticket_no: 150,
+    price: 200
+  }
+]
+test>
+////////////////////////////////////////////////////////////////////////////////////////
+5) test> db.movie.find({name : /.*[s]$/},{}).count()
+1
+//////////////////////////////////////////////////////////////////////////
+6) test> db.movie.find({name : /^[Kk].*/},{}).count()
+3
+//////////////////////////////////////////////////////////////////////
+7) test> db.movie.find({name : /^[0-9].*/},{})
+[
+  {
+    _id: ObjectId('5aaa31ee639395f86922a87f'),
+    name: '3 idiots',
+    actor: [ 'Kareena Kapoor', 'amir', 'kareena', 'mahadavan', 'sharman' ],
+    rating: 3,
+    ticket_no: 150,
+    price: 200
+  }
+]
