@@ -1,0 +1,278 @@
+1)  db.movie.aggregate([{$match : {rating : {$ne : null}}},{$sort:{rating:1}},{$limit:3},{$sort:{price:-1}}])
+[
+  {
+    _id: ObjectId('5c865923d82c19b8ed996550'),
+    name: 'Dil dhadakane do',
+    rating: 3,
+    price: 340,
+    actor: "['Anil kapoor']"
+  },
+  {
+    _id: ObjectId('5ca456072952ebdd7ae2a930'),
+    name: 'paa',
+    actor: [ 'Amitabh', 'vidya balan', 'Abhishek' ],
+    rating: 2,
+    price: 270,
+    ticket_no: 210,
+    rdate: ISODate('2019-01-23T00:00:00.000Z'),
+    others: { director: 'R Balki', songs: 'Amit trivedi' }
+  },
+  {
+    _id: ObjectId('5aaa3334639395f86922a882'),
+    name: 'aradhana',
+    actor: [ 'amitabh', 'prem', 'rajesh khanna' ],
+    rating: 3,
+    ticket_no: 550,
+    price: 260
+  }
+]
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2)  db.movie.aggregate([{$group : {_id : null ,avg_rating:{$avg : '$rating'},total_price :{$sum : '$price '}}}])
+[ { _id: null, avg_rating: 4.62, total_price: 0 } ]
+////////////////////////////////////////////////////////////////////////////////////////////////
+3)  db.movie.aggregate([{$match : {actor : /^amir/}},{$group : {_id : null ,min_price:{$min : '$price'},max_price :{$max : '$price '}}}])
+[ { _id: null, min_price: 200, max_price: null } ]
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+4) db.movie.aggregate([{$match : {actor : /^[kK]/}},{$project:{name : 1,price:1,new_price:{$multiply:['$price',1.10]}}}])
+[
+  {
+    _id: ObjectId('5aaa31ee639395f86922a87f'),
+    name: '3 idiots',
+    price: 200,
+    new_price: 220.00000000000003
+  },
+  {
+    _id: ObjectId('5aaa31a2639395f86922a87e'),
+    name: 'kahani',
+    price: 200,
+    new_price: 220.00000000000003
+  }
+]
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+5)  db.student.insertMany([{name:'Arti',dept : 'CS', marksarray : [67,90,78,93,47],fees : 12000,course : 'Engineering',gender : 'f',scholarship : 8000},{name:'Pooja',dept : 'IT', marksarray : [77,80,63,70,47],fees : 7000,course : 'Bsc',gender : 'f',scholarship : 18000},{name : 'Prasad',dept : 'electronics', marksarray : [66,54,92,41,89],fees : 10000,course : 'BCom',gender : 'm',scholarship : 20000},{name: "Sneha",dept: "electronics",marksarray: [72, 85, 69, 90, 77],fees: 9500,course: "electronics",gender: "f",scholarship: 15000},{name: "Amit",dept: "electronics",marksarray: [88, 74, 91, 65, 80],fees: 11000,course: "electronics",gender: "m",scholarship: 12000},{name: "Rohan",dept: "electronics",marksarray: [81, 76, 88, 92, 70],fees: 10500,course: "BE Electronics",gender: "m",scholarship: 10000}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69c0da21a0001dca8a11402a'),
+    '1': ObjectId('69c0da21a0001dca8a11402b'),
+    '2': ObjectId('69c0da21a0001dca8a11402c'),
+    '3': ObjectId('69c0da21a0001dca8a11402d'),
+    '4': ObjectId('69c0da21a0001dca8a11402e'),
+    '5': ObjectId('69c0da21a0001dca8a11402f')
+  }
+}
+test> db.student.find()
+[
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402a'),
+    name: 'Arti',
+    dept: 'CS',
+    marksarray: [ 67, 90, 78, 93, 47 ],
+    fees: 12000,
+    course: 'Engineering',
+    gender: 'f',
+    scholarship: 8000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402b'),
+    name: 'Pooja',
+    dept: 'IT',
+    marksarray: [ 77, 80, 63, 70, 47 ],
+    fees: 7000,
+    course: 'Bsc',
+    gender: 'f',
+    scholarship: 18000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402c'),
+    name: 'Prasad',
+    dept: 'electronics',
+    marksarray: [ 66, 54, 92, 41, 89 ],
+    fees: 10000,
+    course: 'BCom',
+    gender: 'm',
+    scholarship: 20000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402d'),
+    name: 'Sneha',
+    dept: 'electronics',
+    marksarray: [ 72, 85, 69, 90, 77 ],
+    fees: 9500,
+    course: 'electronics',
+    gender: 'f',
+    scholarship: 15000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402e'),
+    name: 'Amit',
+    dept: 'electronics',
+    marksarray: [ 88, 74, 91, 65, 80 ],
+    fees: 11000,
+    course: 'electronics',
+    gender: 'm',
+    scholarship: 12000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402f'),
+    name: 'Rohan',
+    dept: 'electronics',
+    marksarray: [ 81, 76, 88, 92, 70 ],
+    fees: 10500,
+    course: 'BE Electronics',
+    gender: 'm',
+    scholarship: 10000
+  }
+]
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+6)db.student.aggregate([{$match : {dept : 'electronics'}},{$project:{name : 1,dept:1,marksarray : 1,new_marks:{$map: {input: "$marksarray",as: "mark",in: { $add: ["$$mark", 10] }}}}}])
+[
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402c'),
+    name: 'Prasad',
+    dept: 'electronics',
+    marksarray: [ 66, 54, 92, 41, 89 ],
+    new_marks: [ 76, 64, 102, 51, 99 ]
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402d'),
+    name: 'Sneha',
+    dept: 'electronics',
+    marksarray: [ 72, 85, 69, 90, 77 ],
+    new_marks: [ 82, 95, 79, 100, 87 ]
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402e'),
+    name: 'Amit',
+    dept: 'electronics',
+    marksarray: [ 88, 74, 91, 65, 80 ],
+    new_marks: [ 98, 84, 101, 75, 90 ]
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402f'),
+    name: 'Rohan',
+    dept: 'electronics',
+    marksarray: [ 81, 76, 88, 92, 70 ],
+    new_marks: [ 91, 86, 98, 102, 80 ]
+  }
+]
+/////////////////////////////////////////////////////////////////////////////////
+7)  db.student.aggregate([{ $match: {dept:'electronics'} }, { $group: { _id: 'fees', total_fees: { $sum: '$fees' } } }])
+| [ { _id: 'fees', total_fees: 41000 } ]
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+8) db.student.aggregate([{ $match: {gender:'f'} }, { $group: { _id: 'gender', total_females: { $sum: 1 } } }])
+[ { _id: 'gender', total_females: 3 } ]
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+9) db.student.aggregate([{$sort:{ fees: -1, dept: 1 }}])
+[
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402a'),
+    name: 'Arti',
+    dept: 'CS',
+    marksarray: [ 67, 90, 78, 93, 47 ],
+    fees: 12000,
+    course: 'Engineering',
+    gender: 'f',
+    scholarship: 8000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402e'),
+    name: 'Amit',
+    dept: 'electronics',
+    marksarray: [ 88, 74, 91, 65, 80 ],
+    fees: 11000,
+    course: 'electronics',
+    gender: 'm',
+    scholarship: 12000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402f'),
+    name: 'Rohan',
+    dept: 'electronics',
+    marksarray: [ 81, 76, 88, 92, 70 ],
+    fees: 10500,
+    course: 'BE Electronics',
+    gender: 'm',
+    scholarship: 10000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402c'),
+    name: 'Prasad',
+    dept: 'electronics',
+    marksarray: [ 66, 54, 92, 41, 89 ],
+    fees: 10000,
+    course: 'BCom',
+    gender: 'm',
+    scholarship: 20000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402d'),
+    name: 'Sneha',
+    dept: 'electronics',
+    marksarray: [ 72, 85, 69, 90, 77 ],
+    fees: 9500,
+    course: 'electronics',
+    gender: 'f',
+    scholarship: 15000
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402b'),
+    name: 'Pooja',
+    dept: 'IT',
+    marksarray: [ 77, 80, 63, 70, 47 ],
+    fees: 7000,
+    course: 'Bsc',
+    gender: 'f',
+    scholarship: 18000
+  }
+]
+///////////////////////////////////////////////////////////////////////////////////////////////
+10) db.student.aggregate([{$group : {_id : null , max_fees : {$max : '$fees'}}}])
+[ { _id: null, max_fees: 12000 } ]
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+11) db.student.aggregate([{$project:{name : 1,dept:1,marksarray : 1,marks_gt_80:{$filter: {input: "$marksarray",as: "mark",cond: { $gt: ["$$mark", 80] }}}}}])
+[
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402a'),
+    name: 'Arti',
+    dept: 'CS',
+    marksarray: [ 67, 90, 78, 93, 47 ],
+    marks_gt_80: [ 90, 93 ]
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402b'),
+    name: 'Pooja',
+    dept: 'IT',
+    marksarray: [ 77, 80, 63, 70, 47 ],
+    marks_gt_80: []
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402c'),
+    name: 'Prasad',
+    dept: 'electronics',
+    marksarray: [ 66, 54, 92, 41, 89 ],
+    marks_gt_80: [ 92, 89 ]
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402d'),
+    name: 'Sneha',
+    dept: 'electronics',
+    marksarray: [ 72, 85, 69, 90, 77 ],
+    marks_gt_80: [ 85, 90 ]
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402e'),
+    name: 'Amit',
+    dept: 'electronics',
+    marksarray: [ 88, 74, 91, 65, 80 ],
+    marks_gt_80: [ 88, 91 ]
+  },
+  {
+    _id: ObjectId('69c0da21a0001dca8a11402f'),
+    name: 'Rohan',
+    dept: 'electronics',
+    marksarray: [ 81, 76, 88, 92, 70 ],
+    marks_gt_80: [ 81, 88, 92 ]
+  }
+]
