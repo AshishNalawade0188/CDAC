@@ -1,4 +1,4 @@
-S = 'India is my country'
+S = input("Enter a string :")
 cv = 0
 cc= 0
 for i in S:
@@ -6,5 +6,4 @@ for i in S:
         cv+=1
     else:
         cc+=1
-print(cv,cc)
-
+print("the count of consonents :",cc)

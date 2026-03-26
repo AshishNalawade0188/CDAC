@@ -1,5 +1,14 @@
-a = 5
-b = 10
-c = 15
-a, b, c = b, c, a
-print(a, b, c)
+s = 'India Is My Country'
+CU = 0
+CL = 0
+
+for i in s:
+    if i.isupper():
+        CU+=1
+    else:
+        CL+=1
+print("Uppercase Count :",CU)
+print("Lowercase Count :",CL)
+
+
+        

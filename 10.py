@@ -1,6 +1,5 @@
-name = input("Enter your name : ")
-age = int(input("Enter your age : "))
-address = input("Enter your address : ")
-mobile = int(input("Enter your mobile number : "))
+s = 'india is my country'
+p = s[1::2]
 
-print(name,age,address,mobile, sep="-")
+print(p)
+
